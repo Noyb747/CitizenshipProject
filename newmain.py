@@ -44,6 +44,8 @@ class bin:
             for row in csvreader:
                 rows.append(row)
         stocks[stock[::-1][4:][::-1]] = rows
+    class saves:
+        account = json.loads(open(ROOT + "/bin/saves/account.json", "r").read())
 
 def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pygame.Rect) -> bool:
     """Returns a bool if the mouse's position in on top of a rect"""
@@ -85,19 +87,19 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
     
     pygame.draw.rect(display, bin.cfgs.colors["menubackground"], pygame.Rect(coords[0], coords[1], displayw - coords[0], displayh - coords[1])) # Menu rectangle
 
-    t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"])
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"])
     display.blit(
         t, 
         getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t)
     ) # Portfolio text
 
-    t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"])
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"])
     display.blit(
         t, 
         getTopleftFromMiddle([displayper(0, 50), displayper(1, 90)], t)
     ) # Investing text
 
-    t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Aprender", bin.cfgs.colors["text"])
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Aprender", bin.cfgs.colors["text"])
     display.blit(
         t, 
         getTopleftFromMiddle([displayper(0, 75), displayper(1, 90)], t)
@@ -125,6 +127,7 @@ def main(display: pygame.Surface, clock) -> None:
              # 1: Investing
              # 2: Learning
 
+    balance = 0 # Stored money, total minus the stocks bought or sold, doesn't change with time
     while 1:
         events = checkEvents(pygame.event.get())
         if events["quit"]:
@@ -135,7 +138,8 @@ def main(display: pygame.Surface, clock) -> None:
         drawMenuBar(display, page) # Draw the menu bar
 
         if page == 0:
-            pass
+            t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account2"], f"Balance: {balance}", bin.cfgs.colors["text"])
+            display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 10)], t))
 
         if page == 1:
             pass
