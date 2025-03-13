@@ -59,8 +59,9 @@ def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | p
         left = mx - (surfaceSize.get_width() // 2)
     return [left, top]
 
-def text(fontFamily: str, fontSize: int, text: str, bold: bool = False, italic: bool = False) -> pygame.Surface:
+def text(fontFamily: str, fontSize: int, text: str, color: list[int, int, int], bold: bool = False, italic: bool = False, antialias: bool = True) -> pygame.Surface:
     font = pygame.font.SysFont(fontFamily, fontSize, bold, italic)
+    return font.render(text, antialias, color)
 
 def checkEvents(events: list) -> dict:
     """Function to check window events"""
