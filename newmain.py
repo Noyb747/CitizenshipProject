@@ -74,10 +74,12 @@ def text(fontFamily: str, fontSize: int, text: str, color: list[int, int, int], 
 
 def checkEvents(events: list) -> dict:
     """Checks window events"""
-    output = {"quit": False}
+    output = {"quit": False, "mouseDown": False}
     for event in events:
         if event.type == pygame.QUIT:
             output["quit"] = True # Ends the program if the QUIT event is triggered
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            output["mouseDown"] = True # Checks if the mouse is pressed down
     return output
 
 def drawMenuBar(display: pygame.Surface, page: int) -> None:
@@ -90,35 +92,56 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"])
     display.blit(
         t, 
-        getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t)
+        getTopleftFromMiddle([displayper(0, 15), displayper(1, 90)], t)
     ) # Portfolio text
 
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"])
     display.blit(
         t, 
-        getTopleftFromMiddle([displayper(0, 50), displayper(1, 90)], t)
+        getTopleftFromMiddle([displayper(0, 49), displayper(1, 90)], t)
     ) # Investing text
 
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Aprender", bin.cfgs.colors["text"])
     display.blit(
         t, 
-        getTopleftFromMiddle([displayper(0, 75), displayper(1, 90)], t)
+        getTopleftFromMiddle([displayper(0, 85), displayper(1, 90)], t)
     ) # Learning text
 
     display.blit(
         bin.icons.account, 
-        getTopleftFromMiddle([displayper(0, 25), displayper(1, 95)], bin.icons.account)
+        getTopleftFromMiddle([displayper(0, 15), displayper(1, 95)], bin.icons.account)
     ) # Portfolio icon
 
     display.blit(
         bin.icons.investments, 
-        getTopleftFromMiddle([displayper(0, 50), displayper(1, 95)], bin.icons.investments)
+        getTopleftFromMiddle([displayper(0, 49), displayper(1, 95)], bin.icons.investments)
     ) # Investing icon
 
     display.blit(
         bin.icons.information, 
-        getTopleftFromMiddle([displayper(0, 75), displayper(1, 95)], bin.icons.information)
+        getTopleftFromMiddle([displayper(0, 85), displayper(1, 95)], bin.icons.information)
     ) # Learning icon
+
+def renderPortfolio(display: pygame.Surface, balance: float) -> None:
+    """Renders the portfolio page onto the display"""
+
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account1"], bin.saves.account["accnum"], bin.cfgs.colors["text"], bold=True)
+    display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 3)], t)) # Drawing the account number on the top
+
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account2"], f"Balance: {balance}", bin.cfgs.colors["text"])
+    display.blit(t, [displayper(0, 10), displayper(1, 10)]) # Displaying the users balance
+
+def renderInvesting(display: pygame.Surface) -> None:
+    """Renders the investing page onto the display"""
+
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Investing page", bin.cfgs.colors["text"], bold= True, italic= True, antialias= True)
+    display.blit(t, [displayper(0, 10), displayper(1, 10)])
+
+def renderLearning(display: pygame.Surface) -> None:
+    """Renders the learning page onto the display"""
+
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Learning page", bin.cfgs.colors["text"], bold= True, italic= True, antialias= True)
+    display.blit(t, [displayper(0, 10), displayper(1, 10)])
 
 def main(display: pygame.Surface, clock) -> None:
     """Main function, displaying the window, drawing the main objects, ..."""
@@ -132,23 +155,21 @@ def main(display: pygame.Surface, clock) -> None:
         events = checkEvents(pygame.event.get())
         if events["quit"]:
             return 0
-        
+        if events["mouseDown"]:
+            if ismouseinrect(pygame.mouse.get_pos(), [displayper(0, 5), displayper(1, 90), displayper(0, 20), displayper(1, 10)]): # Checks if the mouse pressed the portfolio icon
+                page = 0
+            elif ismouseinrect(pygame.mouse.get_pos(), [displayper(0, 39), displayper(1, 90), displayper(0, 20), displayper(1, 10)]): # Checks if the mouse pressed the investing icon
+                page = 1
+            elif ismouseinrect(pygame.mouse.get_pos(), [displayper(0, 75), displayper(1, 90), displayper(0, 20), displayper(1, 10)]): # Checks if the mouse pressed the learning icon
+                page = 2
+
         display.fill(bin.cfgs.colors["background"]) # Filling the window with the background color
-
-        drawMenuBar(display, page) # Drawing the menu bar
-
-        if page == 0:
-            t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account1"], bin.saves.account["accnum"], bin.cfgs.colors["text"], bold=True)
-            display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 3)], t)) # Drawing the account number on the top
-
-            t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account2"], f"Balance: {balance}", bin.cfgs.colors["text"])
-            display.blit(t, [displayper(0, 10), displayper(1, 10)]) # Displaying the users balance
-
-        if page == 1:
-            pass
         
-        if page == 2:
-            pass
+        if page == 0: renderPortfolio(display, balance)
+        if page == 1: renderInvesting(display)
+        if page == 2: renderLearning(display)
+        
+        drawMenuBar(display, page) # Drawing the menu bar
 
         pygame.display.flip() # Clearing the screen
 
