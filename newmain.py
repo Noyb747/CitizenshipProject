@@ -66,6 +66,7 @@ def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | p
     return [left, top]
 
 def text(fontFamily: str, fontSize: int, text: str, color: list[int, int, int], bold: bool = False, italic: bool = False, antialias: bool = True) -> pygame.Surface:
+    """Returns a surface that can be blit onto the screen"""
     font = pygame.font.SysFont(fontFamily, fontSize, bold, italic)
     return font.render(text, antialias, color)
 
