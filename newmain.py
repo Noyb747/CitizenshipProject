@@ -4,6 +4,8 @@ import time
 import csv
 import os
 
+import pygame.sysfont
+
 pygame.init()
 
 screendims = [9 * 50, 16 * 50] # [450, 800]
@@ -47,7 +49,7 @@ def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pyg
             return True
     return False
 
-def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | pygame.Surface):
+def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | pygame.Surface) -> list[int, int]:
     mx, my = middle
     if type(surfaceSize) == list:
         top = my - (surfaceSize[1] // 2)
@@ -56,6 +58,9 @@ def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | p
         top = my - (surfaceSize.get_height() // 2)
         left = mx - (surfaceSize.get_width() // 2)
     return [left, top]
+
+def text(fontFamily: str, fontSize: int, text: str, bold: bool = False, italic: bool = False) -> pygame.Surface:
+    font = pygame.font.SysFont(fontFamily, fontSize, bold, italic)
 
 def checkEvents(events: list) -> dict:
     """Function to check window events"""
