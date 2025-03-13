@@ -21,6 +21,9 @@ def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pyg
             return True
     return False
 
+def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | pygame.Surface):
+    pass
+
 def checkEvents(events: list) -> dict:
     """Function to check window events"""
     output = {"quit": False}
