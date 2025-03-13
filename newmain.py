@@ -53,6 +53,7 @@ def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pyg
     return False
 
 def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | pygame.Surface) -> list[int, int]:
+    """Returns the top & left coords from the middle coords and a surfaceSize or surface"""
     mx, my = middle
     if type(surfaceSize) == list:
         sx, sy = surfaceSize[0], surfaceSize[1]
