@@ -205,7 +205,12 @@ def main(display: pygame.Surface, clock) -> None:
 
         clock.tick(bin.cfgs.display["fps"])
 
+display = pygame.display.set_mode(screendims) # Display setup
+pygame.display.set_caption("Aprender a investir") # Setting app title
+
+clock = pygame.time.Clock()
+
 # ted
-main()
+main(display, clock)
 
 pygame.quit()
