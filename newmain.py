@@ -19,24 +19,24 @@ def displayper(wh: int, per: int) -> int:
 
 class bin:
     class cfgs:
-        colors = json.loads(open("./bin/cfgs/colors.cfg", "r").read())
-        text = json.loads(open("./bin/cfgs/text.cfg", "r").read())
+        colors = json.loads(open(ROOT + "/bin/cfgs/colors.cfg", "r").read())
+        text = json.loads(open(ROOT + "/bin/cfgs/text.cfg", "r").read())
         for size in text["sizes"]: # The original text size is in percentage, this for loop converts it into pixels
             text["sizes"][size] = round((displayper(0, text["sizes"][size]) + displayper(1, text["sizes"][size])) / 2)
     class icons:
-        account = pygame.transform.scale(pygame.image.load("./bin/icons/account.png"), (displayper(1, 8), displayper(1, 8)))
-        information = pygame.transform.scale(pygame.image.load("./bin/icons/information.png"), (displayper(1, 8), displayper(1, 8)))
-        investments = pygame.transform.scale(pygame.image.load("./bin/icons/investments.png"), (displayper(1, 8), displayper(1, 8)))
-        menu = pygame.transform.scale(pygame.image.load("./bin/icons/menu.png"), (displayper(1, 5), displayper(1, 5)))
-        back = pygame.transform.scale(pygame.image.load("./bin/icons/back.png"), (displayper(1, 5), displayper(1, 5)))
-        backarrow = pygame.transform.scale(pygame.image.load("./bin/icons/backarrow.png"), (displayper(1, 6), displayper(1, 6)))
-        frontarrow = pygame.transform.scale(pygame.image.load("./bin/icons/frontarrow.png"), (displayper(1, 6), displayper(1, 6)))
+        account = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/account.png"), (displayper(1, 8), displayper(1, 8)))
+        information = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/information.png"), (displayper(1, 8), displayper(1, 8)))
+        investments = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/investments.png"), (displayper(1, 8), displayper(1, 8)))
+        menu = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/menu.png"), (displayper(1, 5), displayper(1, 5)))
+        back = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/back.png"), (displayper(1, 5), displayper(1, 5)))
+        backarrow = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/backarrow.png"), (displayper(1, 6), displayper(1, 6)))
+        frontarrow = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/frontarrow.png"), (displayper(1, 6), displayper(1, 6)))
     stocks = {}
-    for stock in os.listdir("./bin/stocks/"):
+    for stock in os.listdir(ROOT + "/bin/stocks/"):
         fields = []
         rows = []
 
-        with open("./bin/stocks/" + stock, "r") as file:
+        with open(ROOT + "/bin/stocks/" + stock, "r") as file:
             csvreader = csv.reader(file)
             fields = next(csvreader)
             for row in csvreader:
@@ -54,11 +54,14 @@ def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pyg
 def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | pygame.Surface) -> list[int, int]:
     mx, my = middle
     if type(surfaceSize) == list:
-        top = my - (surfaceSize[1] // 2)
-        left = mx - (surfaceSize[0] // 2)
+        sx, sy = surfaceSize[0], surfaceSize[1]
+        top = my - (sy // 2)
+        left = mx - (sx // 2)
     else:
-        top = my - (surfaceSize.get_height() // 2)
-        left = mx - (surfaceSize.get_width() // 2)
+        sx, sy = surfaceSize.get_width(), surfaceSize.get_height()
+        top = my - (sy // 2)
+        left = mx - (sx // 2)
+    print(mx, my, sx, sy, left, top, end="")
     return [left, top]
 
 def text(fontFamily: str, fontSize: int, text: str, color: list[int, int, int], bold: bool = False, italic: bool = False, antialias: bool = True) -> pygame.Surface:
@@ -80,19 +83,26 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
     
     pygame.draw.rect(display, bin.cfgs.colors["menubackground"], pygame.Rect(coords[0], coords[1], displayw - coords[0], displayh - coords[1])) # Menu rectangle
 
+    print("P: ", end="")
+    t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"])
     display.blit(
-        text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"]), 
-        getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)])
+        t, 
+        getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t)
     ) # Portfolio text
+    print(displayper(0, 25), displayper(1, 90))
 
+    #print(getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t))
+
+    t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"])
     display.blit(
-        text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"]), 
-        getTopleftFromMiddle([displayper(0, 50), displayper(1, 90)])
+        t, 
+        getTopleftFromMiddle([displayper(0, 50), displayper(1, 90)], t)
     ) # Investing text
 
+    t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Aprender", bin.cfgs.colors["text"])
     display.blit(
-        text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Aprender", bin.cfgs.colors["text"]), 
-        getTopleftFromMiddle([displayper(0, 75), displayper(1, 90)])
+        t, 
+        getTopleftFromMiddle([displayper(0, 75), displayper(1, 90)], t)
     ) # Learning text
 
 def main() -> None:
