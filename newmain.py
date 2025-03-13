@@ -103,6 +103,21 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
         getTopleftFromMiddle([displayper(0, 75), displayper(1, 90)], t)
     ) # Learning text
 
+    display.blit(
+        bin.icons.account, 
+        getTopleftFromMiddle([displayper(0, 25), displayper(1, 95)], bin.icons.account)
+    ) # Portfolio icon
+
+    display.blit(
+        bin.icons.investments, 
+        getTopleftFromMiddle([displayper(0, 50), displayper(1, 95)], bin.icons.investments)
+    ) # Investing icon
+
+    display.blit(
+        bin.icons.information, 
+        getTopleftFromMiddle([displayper(0, 75), displayper(1, 95)], bin.icons.information)
+    ) # Learning icon
+
 def main(display: pygame.Surface, clock) -> None:
     """Main function, displaying the window, drawing the main objects, ..."""
 
