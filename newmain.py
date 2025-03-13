@@ -78,7 +78,20 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
     
     pygame.draw.rect(display, bin.cfgs.colors["menubackground"], pygame.Rect(coords[0], coords[1], displayw - coords[0], displayh - coords[1])) # Menu rectangle
 
-    display.blit(text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"]), getTopleftFromMiddle([]))
+    display.blit(
+        text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"]), 
+        getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)])
+    ) # Portfolio text
+
+    display.blit(
+        text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"]), 
+        getTopleftFromMiddle([displayper(0, 50), displayper(1, 90)])
+    ) # Investing text
+
+    display.blit(
+        text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Aprender", bin.cfgs.colors["text"]), 
+        getTopleftFromMiddle([displayper(0, 75), displayper(1, 90)])
+    ) # Learning text
 
 def main() -> None:
     """Main function, displaying the window, drawing the main objects, ..."""
