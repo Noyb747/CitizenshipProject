@@ -8,6 +8,8 @@ import pygame.sysfont
 
 pygame.init()
 
+ROOT = os.path.dirname(__file__).replace("\\", "/")[0].upper() + "".join(os.path.dirname(__file__).replace("\\", "/")[1:]) # __file__/../ (./CitizenshipProject/)
+
 screendims = [9 * 50, 16 * 50] # [450, 800]
 displayw, displayh = pygame.display.Info().current_w, pygame.display.Info().current_h # Display dimensions
 
