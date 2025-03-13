@@ -10,8 +10,9 @@ pygame.init()
 
 ROOT = os.path.dirname(__file__).replace("\\", "/")[0].upper() + "".join(os.path.dirname(__file__).replace("\\", "/")[1:]) # __file__/../ (./CitizenshipProject/)
 
+# NOTE: Replace with [pygame.display.Info().current_w, pygame.display.Info().current_h] before compiling
 screendims = [9 * 50, 16 * 50] # [450, 800]
-displayw, displayh = pygame.display.Info().current_w, pygame.display.Info().current_h # Display dimensions
+displayw, displayh = screendims
 
 def displayper(wh: int, per: int) -> int:
     """Function that returns a percentage of the screen's width or height in pixels"""
@@ -61,7 +62,7 @@ def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | p
         sx, sy = surfaceSize.get_width(), surfaceSize.get_height()
         top = my - (sy // 2)
         left = mx - (sx // 2)
-    print(mx, my, sx, sy, left, top, end="")
+    print(mx, my, sx, sy, left, top)
     return [left, top]
 
 def text(fontFamily: str, fontSize: int, text: str, color: list[int, int, int], bold: bool = False, italic: bool = False, antialias: bool = True) -> pygame.Surface:
@@ -89,7 +90,7 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
         t, 
         getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t)
     ) # Portfolio text
-    print(displayper(0, 25), displayper(1, 90))
+    print("P:", displayper(0, 25), displayper(1, 90))
 
     #print(getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t))
 
@@ -132,8 +133,7 @@ def main() -> None:
 
         pygame.display.flip() # Clearing the screen
 
-# NOTE: Replace screendims with [displayw, displayh] before compiling
-display = pygame.display.set_mode(screendims) # Screen dimensions
+display = pygame.display.set_mode(screendims) # Display setup
 
 # ted
 main()
