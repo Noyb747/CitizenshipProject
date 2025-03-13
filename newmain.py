@@ -127,7 +127,7 @@ def main(display: pygame.Surface, clock) -> None:
              # 1: Investing
              # 2: Learning
 
-    balance = 0 # Stored money, total minus the stocks bought or sold, doesn't change with time
+    balance = bin.saves.account["balance"] # Stored money, total minus the stocks bought or sold, doesn't change with time
     while 1:
         events = checkEvents(pygame.event.get())
         if events["quit"]:
@@ -138,8 +138,11 @@ def main(display: pygame.Surface, clock) -> None:
         drawMenuBar(display, page) # Draw the menu bar
 
         if page == 0:
+            t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account1"], bin.saves.account["accnum"], bin.cfgs.colors["text"], bold=True)
+            display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 5)], t))
+
             t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account2"], f"Balance: {balance}", bin.cfgs.colors["text"])
-            display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 10)], t))
+            display.blit(t, [displayper(0, 10), displayper(1, 10)])
 
         if page == 1:
             pass
