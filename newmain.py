@@ -47,6 +47,30 @@ class bin:
     class saves:
         account = json.loads(open(ROOT + "/bin/saves/account.json", "r").read())
 
+class Portfolio:
+    def __init__(self, data: dict = None):
+        self.data = data
+    
+    def loadFile(self, filepath: str) -> None:
+        """Loads the portfolio data from a json file"""
+        self.data = json.loads(open(filepath, "r").read())
+    
+    def loadDict(self, _dict: dict) -> None:
+        """Loads the portfolio data from a python dictionary"""
+        self.data = _dict
+
+    def getNumInvestments(self) -> int:
+        """Returns the number of stocks, ETFs or cryptocoins bought"""
+        investments = 0
+        for category in self.data:
+            for investment in self.data[category]:
+                investments += self.data[category][investment]
+        return investments
+    
+    def getNumInvestmentsTags(self) -> int:
+        """Returns the number of different stocks, ETFs or cryptocoins bought"""
+        return len(self.data["stocks"]) + len(self.data["etfs"]) + len(self.data["cryptocoins"])
+
 def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pygame.Rect) -> bool:
     """Returns a bool if the mouse's position in on top of a rect"""
     rect = [[rect[0], rect[1]], [rect[2], rect[3]]]
@@ -145,12 +169,18 @@ def renderLearning(display: pygame.Surface) -> None:
 
 def main(display: pygame.Surface, clock) -> None:
     """Main function, displaying the window, drawing the main objects, ..."""
+    display = pygame.display.set_mode(screendims) # Display setup
+    pygame.display.set_caption("Aprender a investir") # Setting app title
+    clock = pygame.time.Clock()
+    balance = bin.saves.account["balance"] # Stored money, total minus the stocks bought or sold, doesn't change with time
+
+    portfolio = Portfolio()
+    portfolio.loadDict(bin.saves.account["portfolio"])
 
     page = 0 # 0: Portfolio
-             # 1: Investing
-             # 2: Learning
+            # 1: Investing
+            # 2: Learning
 
-    balance = bin.saves.account["balance"] # Stored money, total minus the stocks bought or sold, doesn't change with time
     while 1:
         events = checkEvents(pygame.event.get())
         if events["quit"]:
@@ -175,12 +205,7 @@ def main(display: pygame.Surface, clock) -> None:
 
         clock.tick(bin.cfgs.display["fps"])
 
-display = pygame.display.set_mode(screendims) # Display setup
-pygame.display.set_caption("Aprender a investir") # Setting app title
-
-clock = pygame.time.Clock()
-
 # ted
-main(display, clock)
+main()
 
 pygame.quit()
