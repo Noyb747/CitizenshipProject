@@ -132,8 +132,6 @@ def main(display: pygame.Surface, clock) -> None:
 
         clock.tick(bin.cfgs.display["fps"])
 
-        print(clock.get_fps())
-
 display = pygame.display.set_mode(screendims) # Display setup
 clock = pygame.time.Clock() # Clock
 
