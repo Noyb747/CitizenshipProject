@@ -135,14 +135,14 @@ def main(display: pygame.Surface, clock) -> None:
         
         display.fill(bin.cfgs.colors["background"]) # Filling the window with the background color
 
-        drawMenuBar(display, page) # Draw the menu bar
+        drawMenuBar(display, page) # Drawing the menu bar
 
         if page == 0:
             t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account1"], bin.saves.account["accnum"], bin.cfgs.colors["text"], bold=True)
-            display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 5)], t))
+            display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 3)], t)) # Drawing the account number on the top
 
             t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account2"], f"Balance: {balance}", bin.cfgs.colors["text"])
-            display.blit(t, [displayper(0, 10), displayper(1, 10)])
+            display.blit(t, [displayper(0, 10), displayper(1, 10)]) # Displaying the users balance
 
         if page == 1:
             pass
@@ -155,9 +155,9 @@ def main(display: pygame.Surface, clock) -> None:
         clock.tick(bin.cfgs.display["fps"])
 
 display = pygame.display.set_mode(screendims) # Display setup
-pygame.display.set_caption("Aprender a investir") # Set app title
+pygame.display.set_caption("Aprender a investir") # Setting app title
 
-clock = pygame.time.Clock() # Clock
+clock = pygame.time.Clock()
 
 # ted
 main(display, clock)
