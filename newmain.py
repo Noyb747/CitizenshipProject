@@ -62,7 +62,6 @@ def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | p
         sx, sy = surfaceSize.get_width(), surfaceSize.get_height()
         top = my - (sy // 2)
         left = mx - (sx // 2)
-    print(mx, my, sx, sy, left, top)
     return [left, top]
 
 def text(fontFamily: str, fontSize: int, text: str, color: list[int, int, int], bold: bool = False, italic: bool = False, antialias: bool = True) -> pygame.Surface:
@@ -84,15 +83,11 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
     
     pygame.draw.rect(display, bin.cfgs.colors["menubackground"], pygame.Rect(coords[0], coords[1], displayw - coords[0], displayh - coords[1])) # Menu rectangle
 
-    print("P: ", end="")
     t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Portfólio", bin.cfgs.colors["text"])
     display.blit(
         t, 
         getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t)
     ) # Portfolio text
-    print("P:", displayper(0, 25), displayper(1, 90))
-
-    #print(getTopleftFromMiddle([displayper(0, 25), displayper(1, 90)], t))
 
     t = text("Courier New", bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"])
     display.blit(
