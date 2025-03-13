@@ -15,7 +15,7 @@ screendims = [9 * 50, 16 * 50] # [450, 800]
 displayw, displayh = screendims
 
 def displayper(wh: int, per: int) -> int:
-    """Function that returns a percentage of the screen's width or height in pixels"""
+    """Returns a percentage of the screen's width or height in pixels"""
     return displayw * (per / 100) if wh == 0 else displayh * (per / 100)
 
 class bin:
@@ -24,6 +24,7 @@ class bin:
         text = json.loads(open(ROOT + "/bin/cfgs/text.cfg", "r").read())
         for size in text["sizes"]: # The original text size is in percentage, this for loop converts it into pixels
             text["sizes"][size] = round((displayper(0, text["sizes"][size]) + displayper(1, text["sizes"][size])) / 2)
+        display = json.loads(open(ROOT + "/bin/cfgs/display.cfg", "r").read())
     class icons:
         account = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/account.png"), (displayper(1, 8), displayper(1, 8)))
         information = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/information.png"), (displayper(1, 8), displayper(1, 8)))
@@ -45,7 +46,7 @@ class bin:
         stocks[stock[::-1][4:][::-1]] = rows
 
 def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pygame.Rect) -> bool:
-    """Function that return a bool if the mouse's position in on top of a rect"""
+    """Returns a bool if the mouse's position in on top of a rect"""
     rect = [[rect[0], rect[1]], [rect[2], rect[3]]]
     if mousepos[0] > rect[0][0] and mousepos[0] < rect[0][0] + rect[1][0]:
         if mousepos[1] > rect[0][1] and mousepos[1] < rect[0][1] + rect[1][1]:
@@ -67,11 +68,10 @@ def getTopleftFromMiddle(middle: list[int, int], surfaceSize: list[int, int] | p
 
 def text(fontFamily: str, fontSize: int, text: str, color: list[int, int, int], bold: bool = False, italic: bool = False, antialias: bool = True) -> pygame.Surface:
     """Returns a surface that can be blit onto the screen"""
-    font = pygame.font.SysFont(fontFamily, fontSize, bold, italic)
-    return font.render(text, antialias, color)
+    return pygame.font.SysFont(fontFamily, fontSize, bold, italic).render(text, antialias, color)
 
 def checkEvents(events: list) -> dict:
-    """Function to check window events"""
+    """Checks window events"""
     output = {"quit": False}
     for event in events:
         if event.type == pygame.QUIT:
@@ -79,7 +79,7 @@ def checkEvents(events: list) -> dict:
     return output
 
 def drawMenuBar(display: pygame.Surface, page: int) -> None:
-    """Function that draws the menubar to the given window (display)"""
+    """Draws the menubar to the given window (display)"""
     barHeight = displayper(1, 12.5)
     coords = [0, displayh - barHeight] # Top left coordenates
     
@@ -103,7 +103,7 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
         getTopleftFromMiddle([displayper(0, 75), displayper(1, 90)], t)
     ) # Learning text
 
-def main() -> None:
+def main(display: pygame.Surface, clock) -> None:
     """Main function, displaying the window, drawing the main objects, ..."""
 
     page = 0 # 0: Portfolio
@@ -130,9 +130,14 @@ def main() -> None:
 
         pygame.display.flip() # Clearing the screen
 
+        clock.tick(bin.cfgs.display["fps"])
+
+        print(clock.get_fps())
+
 display = pygame.display.set_mode(screendims) # Display setup
+clock = pygame.time.Clock() # Clock
 
 # ted
-main()
+main(display, clock)
 
 pygame.quit()
