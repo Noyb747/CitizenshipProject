@@ -68,6 +68,12 @@ class InvestmentsLoader:
         self.time = time
         self.speed = speed
     
+    def _saveTime(self):
+        current = json.loads(open(ROOT + "./bin/saves/time.json").read())
+        current["gametime"] = self.time
+        with open(ROOT + "./bin/saves/time.json", "w+") as file:
+            file.write(json.dumps(current))
+    
     def get(self, category: str, investment: list) -> int:
         """Returns a stock, ETF or cryptocoins value at the current time"""
         if category == "stock":
@@ -80,6 +86,7 @@ class InvestmentsLoader:
     def tick(self) -> None:
         """Ticks the clock, needs to be in the main loop"""
         self.time += self.speed
+        self._saveTime()
 
 def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pygame.Rect) -> bool:
     """Returns a bool if the mouse's position in on top of a rect"""
