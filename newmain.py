@@ -16,7 +16,7 @@ displayw, displayh = screendims
 
 def displayper(wh: int, per: int) -> int:
     """Returns a percentage of the screen's width or height in pixels"""
-    return displayw * (per / 100) if wh == 0 else displayh * (per / 100)
+    return screendims[wh] * (per /100)
 
 class bin:
     class cfgs:
