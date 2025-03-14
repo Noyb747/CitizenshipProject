@@ -46,6 +46,7 @@ class bin:
         stocks[stock[::-1][4:][::-1]] = rows
     class saves:
         account = json.loads(open(ROOT + "/bin/saves/account.json", "r").read())
+        time = json.loads(open(ROOT + "/bin/saves/time.json", "r").read())
 
 class Portfolio:
     def __init__(self, data: dict = None):
@@ -188,6 +189,8 @@ def main(display: pygame.Surface, clock) -> None:
 
     portfolio = Portfolio()
     portfolio.loadDict(bin.saves.account["portfolio"])
+
+    investmentsloader = InvestmentsLoader(bin.saves.time["gametime"])
 
     page = 0 # 0: Portfolio
             # 1: Investing
