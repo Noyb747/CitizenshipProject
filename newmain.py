@@ -72,8 +72,9 @@ class Portfolio:
         return len(self.data["stocks"]) + len(self.data["etfs"]) + len(self.data["cryptocoins"])
 
 class InvestmentsLoader:
-    def __init__(self, time: int):
+    def __init__(self, time: int, speed: float = 1):
         self.time = time
+        self.speed = speed
     
     def get(self, category: str, investment: list):
         """Returns a stock, ETF or cryptocoins value at the current time"""
@@ -81,10 +82,8 @@ class InvestmentsLoader:
             return bin.stocks[investment][self.time]
 
     def tick(self):
-        self.time += 1
-
-print(InvestmentsLoader(2).get("stock", "A"))
-print(str(bin.stocks)[:100]); quit()
+        """Ticks the clock, needs to be in the main loop"""
+        self.time += self.speed
 
 def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pygame.Rect) -> bool:
     """Returns a bool if the mouse's position in on top of a rect"""
@@ -163,7 +162,6 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
 
 def renderPortfolio(display: pygame.Surface, balance: float) -> None:
     """Renders the portfolio page onto the display"""
-
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["account1"], bin.saves.account["accnum"], bin.cfgs.colors["text"], bold=True)
     display.blit(t, getTopleftFromMiddle([displayper(0, 50), displayper(1, 3)], t)) # Drawing the account number on the top
 
@@ -172,13 +170,11 @@ def renderPortfolio(display: pygame.Surface, balance: float) -> None:
 
 def renderInvesting(display: pygame.Surface) -> None:
     """Renders the investing page onto the display"""
-
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Investing page", bin.cfgs.colors["text"], bold= True, italic= True, antialias= True)
     display.blit(t, [displayper(0, 10), displayper(1, 10)])
 
 def renderLearning(display: pygame.Surface) -> None:
     """Renders the learning page onto the display"""
-
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Learning page", bin.cfgs.colors["text"], bold= True, italic= True, antialias= True)
     display.blit(t, [displayper(0, 10), displayper(1, 10)])
 
