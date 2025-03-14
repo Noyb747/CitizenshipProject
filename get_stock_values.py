@@ -5,8 +5,8 @@ import os
 
 ROOT = os.path.dirname(__file__).replace("\\", "/")[0].upper() + "".join(os.path.dirname(__file__).replace("\\", "/")[1:]) # __file__/../ (./CitizenshipProject/)
 
-def reformatTickers(tickers):
-    return set([ticker.replace(".", "-") for ticker in tickers])
+def reformatTickers(tickers) -> list:
+    return list(set([ticker.replace(".", "-") for ticker in tickers]))
 
 def getStockData(ticker):
     data = yf.download(ticker, progress=False)
