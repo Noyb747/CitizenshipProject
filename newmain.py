@@ -71,6 +71,21 @@ class Portfolio:
         """Returns the number of different stocks, ETFs or cryptocoins bought"""
         return len(self.data["stocks"]) + len(self.data["etfs"]) + len(self.data["cryptocoins"])
 
+class InvestmentsLoader:
+    def __init__(self, time: int):
+        self.time = time
+    
+    def get(self, category: str, investment: list):
+        """Returns a stock, ETF or cryptocoins value at the current time"""
+        if category == "stock":
+            return bin.stocks[investment][self.time]
+
+    def tick(self):
+        self.time += 1
+
+print(InvestmentsLoader(2).get("stock", "A"))
+print(str(bin.stocks)[:100]); quit()
+
 def ismouseinrect(mousepos: list[int, int], rect: list[int, int, int, int] | pygame.Rect) -> bool:
     """Returns a bool if the mouse's position in on top of a rect"""
     rect = [[rect[0], rect[1]], [rect[2], rect[3]]]
@@ -167,6 +182,7 @@ def renderLearning(display: pygame.Surface) -> None:
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Learning page", bin.cfgs.colors["text"], bold= True, italic= True, antialias= True)
     display.blit(t, [displayper(0, 10), displayper(1, 10)])
 
+
 def main(display: pygame.Surface, clock) -> None:
     """Main function, displaying the window, drawing the main objects, ..."""
     display = pygame.display.set_mode(screendims) # Display setup
@@ -203,7 +219,7 @@ def main(display: pygame.Surface, clock) -> None:
 
         pygame.display.flip() # Clearing the screen
 
-        clock.tick(bin.cfgs.display["fps"])
+        clock.tick(bin.cfgs.display["fps"]) # Set fps
 
 display = pygame.display.set_mode(screendims) # Display setup
 pygame.display.set_caption("Aprender a investir") # Setting app title
