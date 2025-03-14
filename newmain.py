@@ -35,15 +35,8 @@ class bin:
         frontarrow = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/frontarrow.png"), (displayper(1, 6), displayper(1, 6)))
     stocks = {}
     for stock in os.listdir(ROOT + "/bin/stocks/"):
-        fields = []
-        rows = []
-
-        with open(ROOT + "/bin/stocks/" + stock, "r") as file:
-            csvreader = csv.reader(file)
-            fields = next(csvreader)
-            for row in csvreader:
-                rows.append(row)
-        stocks[stock[::-1][4:][::-1]] = rows
+        file = open(ROOT + "/bin/stocks/" + stock, "r").read()
+        stocks[stock[::-1][5:][::-1]] = file
     class saves:
         account = json.loads(open(ROOT + "/bin/saves/account.json", "r").read())
         time = json.loads(open(ROOT + "/bin/saves/time.json", "r").read())
