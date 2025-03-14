@@ -80,7 +80,7 @@ class InvestmentsLoader:
     def get(self, category: str, investment: list):
         """Returns a stock, ETF or cryptocoins value at the current time"""
         if category == "stock":
-            return bin.stocks[investment][self.time]
+            return bin.stocks[investment][round(self.time)]
 
     def tick(self):
         """Ticks the clock, needs to be in the main loop"""
@@ -190,7 +190,7 @@ def main(display: pygame.Surface, clock) -> None:
     portfolio = Portfolio()
     portfolio.loadDict(bin.saves.account["portfolio"])
 
-    investmentsloader = InvestmentsLoader(bin.saves.time["gametime"])
+    investmentsloader = InvestmentsLoader(bin.saves.time["gametime"], .01)
 
     page = 0 # 0: Portfolio
             # 1: Investing
@@ -219,6 +219,7 @@ def main(display: pygame.Surface, clock) -> None:
         pygame.display.flip() # Clearing the screen
 
         clock.tick(bin.cfgs.display["fps"]) # Set fps
+        investmentsloader.tick()
 
 display = pygame.display.set_mode(screendims) # Display setup
 pygame.display.set_caption("Aprender a investir") # Setting app title
