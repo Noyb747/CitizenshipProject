@@ -1,7 +1,5 @@
 import pygame
 import json
-import time
-import csv
 import os
 
 import pygame.sysfont
@@ -35,7 +33,7 @@ class bin:
         frontarrow = pygame.transform.scale(pygame.image.load(ROOT + "/bin/icons/frontarrow.png"), (displayper(1, 6), displayper(1, 6)))
     stocks = {}
     for stock in os.listdir(ROOT + "/bin/stocks/"):
-        file = open(ROOT + "/bin/stocks/" + stock, "r").read()
+        file = json.loads(open(ROOT + "/bin/stocks/" + stock, "r").read())
         stocks[stock[::-1][5:][::-1]] = file
     class saves:
         account = json.loads(open(ROOT + "/bin/saves/account.json", "r").read())
@@ -70,12 +68,16 @@ class InvestmentsLoader:
         self.time = time
         self.speed = speed
     
-    def get(self, category: str, investment: list):
+    def get(self, category: str, investment: list) -> int:
         """Returns a stock, ETF or cryptocoins value at the current time"""
         if category == "stock":
             return bin.stocks[investment][round(self.time)]
+        if category == "etf":
+            pass
+        if category == "cryptocoin":
+            pass
 
-    def tick(self):
+    def tick(self) -> None:
         """Ticks the clock, needs to be in the main loop"""
         self.time += self.speed
 
@@ -130,7 +132,7 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Investir", bin.cfgs.colors["text"])
     display.blit(
         t, 
-        getTopleftFromMiddle([displayper(0, 49), displayper(1, 90)], t)
+        getTopleftFromMiddle([displayper(0, 50), displayper(1, 90)], t)
     ) # Investing text
 
     t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["menubar"], "Aprender", bin.cfgs.colors["text"])
@@ -146,7 +148,7 @@ def drawMenuBar(display: pygame.Surface, page: int) -> None:
 
     display.blit(
         bin.icons.investments, 
-        getTopleftFromMiddle([displayper(0, 49), displayper(1, 95)], bin.icons.investments)
+        getTopleftFromMiddle([displayper(0, 50), displayper(1, 95)], bin.icons.investments)
     ) # Investing icon
 
     display.blit(
@@ -164,12 +166,12 @@ def renderPortfolio(display: pygame.Surface, balance: float) -> None:
 
 def renderInvesting(display: pygame.Surface) -> None:
     """Renders the investing page onto the display"""
-    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Investing page", bin.cfgs.colors["text"], bold= True, italic= True, antialias= True)
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Investing page", bin.cfgs.colors["text"], bold=True, italic=True)
     display.blit(t, [displayper(0, 10), displayper(1, 10)])
 
 def renderLearning(display: pygame.Surface) -> None:
     """Renders the learning page onto the display"""
-    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Learning page", bin.cfgs.colors["text"], bold= True, italic= True, antialias= True)
+    t = text(bin.cfgs.text["font"], bin.cfgs.text["sizes"]["invest1"], "Learning page", bin.cfgs.colors["text"], bold=True, italic=True)
     display.blit(t, [displayper(0, 10), displayper(1, 10)])
 
 
@@ -186,8 +188,8 @@ def main(display: pygame.Surface, clock) -> None:
     investmentsloader = InvestmentsLoader(bin.saves.time["gametime"], .01)
 
     page = 0 # 0: Portfolio
-            # 1: Investing
-            # 2: Learning
+             # 1: Investing
+             # 2: Learning
 
     while 1:
         events = checkEvents(pygame.event.get())
